@@ -1,8 +1,8 @@
 class Mixtio.Models.ConsumableType extends Backbone.Model
 
   initialize: (attributes) ->
-    attributes.recipe_ingredients ||= []
-    @set('recipe_ingredients', new Mixtio.Collections.ConsumableTypes(attributes.recipe_ingredients))
+    attributes.latest_lots ||= []
+    @set('latest_lots', new Mixtio.Collections.Lots(attributes.latest_lots))
 
   favourite: () ->
     @_favourites_controller('create')

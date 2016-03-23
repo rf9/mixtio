@@ -1,0 +1,1 @@
+class Mixtio.Models.Lot extends Backbone.Model

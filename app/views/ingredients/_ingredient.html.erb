@@ -1,0 +1,10 @@
+<tr>
+  <td><%= ingredient.name %></td>
+  <td><%= ingredient.supplier %></td>
+  <td><%= ingredient.product_code %></td>
+  <td class="text-center">
+    <%= link_to edit_ingredient_path(ingredient) do %>
+      <%= fa_icon "pencil" %>
+    <% end %>
+  </td>
+</tr>

@@ -2,8 +2,8 @@
 
     <script type="text/javascript">
       Mixtio.Bootstrap.UserFavourites  = <%= json_escape(ConsumableType.find_user_favourites(current_user).to_json.html_safe) %>
-      Mixtio.Bootstrap.ConsumableTypes = <%= json_escape(ConsumableType.order_by_name.to_json(include: :recipe_ingredients).html_safe) %>
-      Mixtio.Bootstrap.Kitchens        = <%= json_escape(Kitchen.order_by_name.to_json.html_safe) %>
+      Mixtio.Bootstrap.ConsumableTypes = <%= json_escape(ConsumableType.order_by_name.to_json(include: {latest_lots: {include: :ingredient}}).html_safe) %>
+      Mixtio.Bootstrap.IngredientTypes = <%= json_escape(Ingredient.all.to_json.html_safe) %>
     </script>
 
     <div class="form-group">
@@ -28,7 +28,7 @@
           <div class="col-md-12">
             <table id="batch-ingredients-table" class="table table-striped">
               <tr>
-                <th>Ingredient*</th><th>Lot/Batch Number</th><th>Supplier (Product Code)*</th><th></th>
+                <th>Ingredient*</th><th>Lot Number</th><th></th>
               </tr>
             </table>
           </div>

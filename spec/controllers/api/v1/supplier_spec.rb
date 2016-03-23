@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::SuppliersController, type: :request do
+describe Api::V1::IngredientsController, type: :request do
 
   describe "GET #show" do
 

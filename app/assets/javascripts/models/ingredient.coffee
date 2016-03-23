@@ -1,1 +1,0 @@
-class Mixtio.Models.Ingredient extends Backbone.Model

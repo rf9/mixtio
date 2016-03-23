@@ -43,7 +43,7 @@ protected
     params.require(:batch_form)
           .permit(:consumable_type_id, :consumable_name, :expiry_date,
                   :aliquots, :aliquot_volume, :aliquot_unit, :batch_volume,
-                  :ingredients => [:consumable_type_id, :number, :kitchen_id])
+                  lots: [:ingredient_id, :number])
   end
 
   def batches

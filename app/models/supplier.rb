@@ -1,2 +1,0 @@
-class Supplier < Kitchen
-end

@@ -1,0 +1,18 @@
+<%= form_for @ingredient do |f| %>
+    <div class="form-group">
+      <%= f.label :name, "Name*" %>
+      <%= f.text_field :name, { class: 'form-control' } %>
+    </div>
+    <div class="form-group">
+      <%= f.label :supplier, "Supplier*" %>
+      <%= f.text_field :supplier, { class: 'form-control' } %>
+    </div>
+    <div class="form-group">
+      <%= f.label :product_code, "Product code*" %>
+      <%= f.text_field :product_code, { class: 'form-control' } %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit nil, { class: 'btn btn-primary' } %>
+    </div>
+<% end %>

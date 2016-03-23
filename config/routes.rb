@@ -6,9 +6,8 @@ Rails.application.routes.draw do
   resources :consumables
   resources :batches
   resources :users
-  resources :kitchens
   resources :teams
-  resources :suppliers
+  resources :ingredients
 
   post 'batches/:id/print', to: 'batches#print', as: 'print'
 
@@ -31,8 +30,6 @@ Rails.application.routes.draw do
       resources :consumable_types, only: [:show, :index]
       resources :ingredients, only: [:show, :index]
       resources :batches, only: [:show, :index]
-      resources :lots, only: [:show, :index]
-      resources :suppliers, only: [:show, :index]
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321092209) do
+ActiveRecord::Schema.define(version: 20160323120847) do
 
   create_table "audits", force: :cascade do |t|
     t.integer  "auditable_id"
@@ -25,6 +25,20 @@ ActiveRecord::Schema.define(version: 20160321092209) do
 
   add_index "audits", ["auditable_type", "auditable_id"], name: "index_audits_on_auditable_type_and_auditable_id"
   add_index "audits", ["user_id"], name: "index_audits_on_user_id"
+
+  create_table "batches", force: :cascade do |t|
+    t.integer  "consumable_type_id"
+    t.integer  "user_id"
+    t.string   "number"
+    t.date     "expiry_date"
+    t.decimal  "volume",             precision: 10, scale: 3
+    t.integer  "unit"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
+  add_index "batches", ["consumable_type_id"], name: "index_batches_on_consumable_type_id"
+  add_index "batches", ["user_id"], name: "index_batches_on_user_id"
 
   create_table "consumable_types", force: :cascade do |t|
     t.string   "name"
@@ -58,23 +72,11 @@ ActiveRecord::Schema.define(version: 20160321092209) do
   add_index "favourites", ["user_id"], name: "index_favourites_on_user_id"
 
   create_table "ingredients", force: :cascade do |t|
-    t.integer  "consumable_type_id"
-    t.integer  "kitchen_id"
-    t.string   "number"
-    t.string   "type"
-    t.date     "expiry_date"
-    t.decimal  "volume",             precision: 10, scale: 3
-    t.integer  "unit"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-  end
-
-  add_index "ingredients", ["consumable_type_id"], name: "index_ingredients_on_consumable_type_id"
-  add_index "ingredients", ["kitchen_id"], name: "index_ingredients_on_kitchen_id"
-
-  create_table "kitchens", force: :cascade do |t|
-    t.string "name"
-    t.string "type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "name"
+    t.string   "supplier"
+    t.string   "product_code"
   end
 
   create_table "label_types", force: :cascade do |t|
@@ -84,15 +86,16 @@ ActiveRecord::Schema.define(version: 20160321092209) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "mixtures", force: :cascade do |t|
+  create_table "lots", force: :cascade do |t|
     t.integer  "batch_id"
     t.integer  "ingredient_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "number"
   end
 
-  add_index "mixtures", ["batch_id"], name: "index_mixtures_on_batch_id"
-  add_index "mixtures", ["ingredient_id"], name: "index_mixtures_on_ingredient_id"
+  add_index "lots", ["batch_id"], name: "index_lots_on_batch_id"
+  add_index "lots", ["ingredient_id"], name: "index_lots_on_ingredient_id"
 
   create_table "printers", force: :cascade do |t|
     t.string  "name"
@@ -102,10 +105,14 @@ ActiveRecord::Schema.define(version: 20160321092209) do
   add_index "printers", ["label_type_id"], name: "index_printers_on_label_type_id"
 
   create_table "recipes", force: :cascade do |t|
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "consumable_type_id"
-    t.integer  "recipe_ingredient_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "ingredients_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "users", force: :cascade do |t|

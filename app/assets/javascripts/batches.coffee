@@ -2,10 +2,9 @@ $ ->
   for item in $("#batch-ingredients-table")
 
     # Create the Collections
-    userFavouritesCollection  = new Mixtio.Collections.UserFavourites(Mixtio.Bootstrap.UserFavourites)
+    userFavouritesCollection = new Mixtio.Collections.UserFavourites(Mixtio.Bootstrap.UserFavourites)
     consumableTypesCollection = new Mixtio.Collections.ConsumableTypes(Mixtio.Bootstrap.ConsumableTypes)
-    kitchensCollection        = new Mixtio.Collections.Kitchens(Mixtio.Bootstrap.Kitchens)
-    ingredientsCollection     = new Mixtio.Collections.Ingredients()
+    lotsCollection = new Mixtio.Collections.Lots()
 
     # Create the Views
     consumableTypeView = new Mixtio.Views.ConsumableTypes(
@@ -16,21 +15,20 @@ $ ->
 
     favouritesStarView = new Mixtio.Views.FavouritesStar(el: $('i.fa-star'))
 
-    ingredientsView = new Mixtio.Views.Ingredients(
+    lotsView = new Mixtio.Views.Lots(
       el: item,
-      collection: ingredientsCollection
-      consumableTypes: consumableTypesCollection
-      kitchens: kitchensCollection
+      collection: lotsCollection
+      ingredientTypes: Mixtio.Bootstrap.IngredientTypes
     )
 
     scanConsumableView = new Mixtio.Views.ScanConsumable(
       el: $('#consumable-barcode')
-      collection: ingredientsCollection
+      collection: lotsCollection
     )
 
-    addIngredientView = new Mixtio.Views.AddIngredient(
+    addIngredientView = new Mixtio.Views.AddLot(
       el: $('#add_ingredient_button')
-      collection: ingredientsCollection
+      collection: lotsCollection
     )
 
     expiryDateView = new Mixtio.Views.ExpiryDate(el: $('#batch_form_expiry_date'))
@@ -46,10 +44,9 @@ $ ->
       favouritesStarView.update(model, options)
       expiryDateView.update(model)
 
-      if model.get('recipe_ingredients').length is 0
-        ingredientsCollection.reset()
-      else
-        ingredientsCollection.findAndSetToLatest(model.get('recipe_ingredients'))
+      console.log model?.get('latest_lots')
+
+      lotsView.update(model?.get('latest_lots'))
     )
 
     ## When the user favourites/unfavourites a Consumable Type, add/remove it to/from the collection

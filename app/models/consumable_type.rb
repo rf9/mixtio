@@ -3,11 +3,6 @@ class ConsumableType < ActiveRecord::Base
   include Auditable
   include HasOrderByName
 
-  has_many :ingredients
-
-  has_many :recipes
-  has_many :recipe_ingredients, :through => :recipes
-
   has_many :favourites
   has_many :users, :through => :favourites
 
@@ -27,14 +22,8 @@ class ConsumableType < ActiveRecord::Base
     storage_condition.gsub('°', '')
   end
 
-  # TODO: Remove this
-  def latest_ingredients
-    return unless recipe_ingredients
-    recipe_ingredients.map do |recipe_ingredient|
-      Ingredient.where("consumable_type_id = ?", recipe_ingredient.id)
-        .order(created_at: :desc)
-        .first
-    end
+  def latest_lots
+    Batch.where(consumable_type: self).last.lots
   end
 
   def self.find_user_favourites(user)

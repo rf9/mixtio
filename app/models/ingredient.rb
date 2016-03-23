@@ -4,5 +4,5 @@ class Ingredient < ActiveRecord::Base
 
   has_many :mixtures
 
-  validates :consumable_type, :kitchen, :presence => true
+  validates :name, :supplier, :product_code, presence: true
 end

@@ -4,7 +4,7 @@ class BatchForm
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  ATTRIBUTES = [:ingredients, :consumable_type_id, :expiry_date, :aliquots,
+  ATTRIBUTES = [:lots, :consumable_type_id, :expiry_date, :aliquots,
                 :aliquot_volume, :aliquot_unit, :batch_volume, :current_user]
 
   attr_accessor *ATTRIBUTES
@@ -34,12 +34,12 @@ class BatchForm
 
   validate do
     selected_ingredients.each do |ingredient|
-      errors[:ingredient] << "consumable type can't be empty" if ingredient[:consumable_type_id].empty?
-      errors[:ingredient] << "supplier can't be empty" if ingredient[:kitchen_id].empty?
+      # errors[:ingredient] << "consumable type can't be empty" if ingredient[:consumable_type_id].empty?
+      # errors[:ingredient] << "supplier can't be empty" if ingredient[:kitchen_id].empty?
 
-      if Team.exists?(ingredient[:kitchen_id])
-        errors[:ingredient] << "with number #{ingredient[:number]} could not be found" if !Batch.exists?(number: ingredient[:number], kitchen_id: ingredient[:kitchen_id])
-      end
+      # if Team.exists?(ingredient[:kitchen_id])
+      #   errors[:ingredient] << "with number #{ingredient[:number]} could not be found" if !Batch.exists?(number: ingredient[:number], kitchen_id: ingredient[:kitchen_id])
+      # end
 
     end
   end
@@ -49,35 +49,34 @@ class BatchForm
   end
 
   def find_ingredients
-    selected_ingredients.map do |ingredient|
-      Ingredient.exists?(ingredient) ? Ingredient.where(ingredient).first : Lot.create(ingredient)
-    end
+    # selected_ingredients.map do |ingredient|
+    #   Ingredient.exists?(ingredient) ? Ingredient.where(ingredient).first : Lot.create(ingredient)
+    # end
+    []
   end
 
   def selected_ingredients
-    ingredients.reject { |i| i == "" }
+    lots.reject { |i| i == "" }
   end
 
   def batch
     @batch ||= Batch.new(consumable_type_id: consumable_type_id, expiry_date: expiry_date,
-                         ingredients: find_ingredients, kitchen: current_user.team,
+                         lots: find_ingredients, user: current_user.user,
                          volume: batch_volume, unit: 'L')
   end
 
   def save
     return false unless valid?
 
-    begin
-      ActiveRecord::Base.transaction do
-        batch.save!
+    ActiveRecord::Base.transaction do
+      batch.save!
 
-        attributes = aliquot_volume.to_f > 0 ? {volume: aliquot_volume, unit: aliquot_unit.to_i} : {}
-        batch.consumables.create!(Array.new(aliquots.to_i, attributes))
+      batch.lots.create!(lots)
 
-        batch.create_audit(user: current_user, action: 'create')
-      end
-    rescue
-      return false
+      attributes = aliquot_volume.to_f > 0 ? {volume: aliquot_volume, unit: aliquot_unit.to_i} : {}
+      batch.consumables.create!(Array.new(aliquots.to_i, attributes))
+
+      batch.create_audit(user: current_user, action: 'create')
     end
   end
 

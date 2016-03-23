@@ -1,8 +1,8 @@
 <div class="title row"> 
   <div class="col-md-12">
     <h2>
-      Suppliers <%= link_to new_supplier_path, { class: 'btn btn-primary pull-right', role: 'button' } do %>
-        <%= fa_icon "plus" %> New Supplier
+      Ingredients <%= link_to new_ingredient_path, { class: 'btn btn-primary pull-right', role: 'button' } do %>
+        <%= fa_icon "plus" %> New Ingredient
       <% end %>
     </h2>
   </div>
@@ -12,11 +12,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Supplier</th><th></th>
-        </tr>  
+          <th>Name</th>
+          <th>Supplier</th>
+          <th>Product code</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-        <%= render suppliers %>      
+        <%= render ingredients %>      
       </tbody>
     </table>
   </div>
@@ -24,7 +27,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="text-center">
-      <%= paginate suppliers %>
+      <%= paginate ingredients %>
     </div>
   </div>
 </div>
